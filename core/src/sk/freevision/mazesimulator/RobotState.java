@@ -6,8 +6,8 @@ import lombok.Data;
 public class RobotState {
     private float leftMotor = 0;
     private float rightMotor = 0;
-
     private float[] sensors;
+    private float angle;
 
     public RobotState(int numSensors) {
         sensors = new float[numSensors];

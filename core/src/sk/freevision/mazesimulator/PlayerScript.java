@@ -1,6 +1,7 @@
 package sk.freevision.mazesimulator;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.MathUtils;
 
 import javax.script.*;
 
@@ -47,6 +48,8 @@ public class PlayerScript {
     }
 
     public void update() {
+        robotState.setAngle(Math.abs((player.getMainBody().getAngle() * MathUtils.radiansToDegrees) % 360.0f));
+
         try {
             invocable.invokeFunction("update");
         } catch (ScriptException | NoSuchMethodException e) {
