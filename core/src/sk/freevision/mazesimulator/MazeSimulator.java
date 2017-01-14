@@ -146,6 +146,8 @@ public class MazeSimulator extends ApplicationAdapter {
 
         // Render debug
         debugRenderer.render(world, camera.combined);
+
+        Gdx.graphics.setTitle(String.valueOf(Gdx.graphics.getFramesPerSecond()));
     }
 
     private void handleInput() {
