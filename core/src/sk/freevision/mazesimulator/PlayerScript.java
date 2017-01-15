@@ -2,6 +2,7 @@ package sk.freevision.mazesimulator;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 
 import javax.script.*;
 
@@ -16,12 +17,20 @@ public class PlayerScript {
     private boolean enabled = false;
     private Invocable invocable;
 
+    private Vector2 lastLeftMotorPosition;
+    private Vector2 lastRightMotorPosition;
+    private float leftMotorSteps = 0f;
+    private float rightMotorSteps = 0f;
+
     public PlayerScript(Player player, String script) {
         this.player = player;
         this.script = script;
 
         engine = new ScriptEngineManager().getEngineByName("nashorn");
         invocable = (Invocable) engine;
+
+        lastLeftMotorPosition = player.getLeftTireBody().getPosition().cpy();
+        lastRightMotorPosition = player.getRightTireBody().getPosition().cpy();
     }
 
     public void start() {
@@ -47,7 +56,20 @@ public class PlayerScript {
         });
     }
 
+    private float calculateMotorSteps(Vector2 currentPosition, Vector2 lastPosition) {
+        float motorStepLength = lastPosition.dst(currentPosition);
+        lastPosition.set(currentPosition.x, currentPosition.y);
+        return motorStepLength;
+    }
+
     public void update() {
+        // Calculate motor steps
+        leftMotorSteps += calculateMotorSteps(player.getLeftTireBody().getPosition(), lastLeftMotorPosition);
+        rightMotorSteps += calculateMotorSteps(player.getRightTireBody().getPosition(), lastRightMotorPosition);
+        robotState.setLeftMotorSteps(leftMotorSteps);
+        robotState.setRightMotorSteps(rightMotorSteps);
+
+        // Calculate angle
         robotState.setAngle(Math.abs((player.getMainBody().getAngle() * MathUtils.radiansToDegrees) % 360.0f));
 
         try {

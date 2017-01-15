@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
+import lombok.Getter;
 import net.dermetfan.gdx.graphics.g2d.Box2DSprite;
 
 import java.util.function.BiConsumer;
@@ -15,9 +16,14 @@ public class Player {
     public static final float MAX_DISTANCE = 40.0f;
     private final World world;
     private final Sprite sprite;
+
+    @Getter
     private final Body mainBody;
+    @Getter
     private final Body leftTireBody;
+    @Getter
     private final Body rightTireBody;
+
     private final ShapeRenderer shapeRenderer;
 
     private BiConsumer<Integer, Float> onRaycast;
@@ -181,10 +187,6 @@ public class Player {
         evaluateRay(3, new Vector2(+1.5f, 4), new Vector2(+rayLength, 0));
         evaluateRay(4, new Vector2(-2.5f, 3), new Vector2(-rayLength, rayLength));
         evaluateRay(5, new Vector2(+2.5f, 3), new Vector2(+rayLength, rayLength));
-    }
-
-    public Body getMainBody() {
-        return mainBody;
     }
 
     public BiConsumer<Integer, Float> getOnRaycast() {
